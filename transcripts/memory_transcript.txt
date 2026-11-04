@@ -1,0 +1,16 @@
+Session memory-demo-first — Turn 1
+User: I have a cardiology appointment APT-0007 with Dr. Rao.
+Assistant: Got it. I'll keep that appointment detail in this session.
+
+Session memory-demo-first — Turn 2
+User: Which specialty and doctor did I mention?
+Assistant: You mentioned cardiology and Dr. Rao.
+
+Session memory-demo-first — Turn 3
+User: What was the appointment ID?
+Assistant: The appointment ID was APT-0007.
+
+Session memory-demo-second — isolated from memory-demo-first
+User: Which specialty and doctor did I mention earlier?
+Assistant: I don't have that context in this session.
+Expected: the first session's appointment details are unavailable.

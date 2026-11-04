@@ -1,0 +1,12 @@
+Run 1:
+{
+  "approved": true,
+  "final_answer": "Cardiology consultations have a standard fee of ₹1,200.",
+  "reason": "The answer is supported by the supplied retrieved context."
+}
+Run 2:
+{
+  "approved": false,
+  "final_answer": "Cardiology consultations have a standard fee of ₹1,200.",
+  "reason": "Removed the unsupported Sunday consultation claim."
+}
