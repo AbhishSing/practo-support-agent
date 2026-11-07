@@ -1,0 +1,3 @@
+DAYS_SINCE_CREATED_P80 = 22.2
+ESCALATION_THRESHOLD = 0.8960
+Formula: 0.6 * follow_up_required + 0.4 * (days_since_created / 30)

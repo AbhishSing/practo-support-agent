@@ -1,8 +1,11 @@
 """Demonstrate session-isolated chat history and write a transcript."""
 
 import re
+import sys
 from pathlib import Path
 from typing import Any
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from langchain_core.messages import HumanMessage
 from langchain_core.runnables import RunnableLambda

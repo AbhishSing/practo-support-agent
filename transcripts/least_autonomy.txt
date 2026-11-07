@@ -1,0 +1,2 @@
+Lookup has check_appointment_status: True
+Blocked as expected: Composer must not have check_appointment_status.

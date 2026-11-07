@@ -1,0 +1,111 @@
+Query: How much is a cardiology consultation?
+Top-1 similarity: 0.7183034945217283
+Fallback fired: False
+Sources: ['consultation-fee structure by specialty.md', 'telemedicine eligibility.md']
+Answer: cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation.
+
+# Consultation Fee Structure
+
+**Document ID:** `KB-003`
+**Topic:** `consultation-fee structure by specialty`
+
+---
+
+General Medicine consultations start at ₹500, while specialized visits such as Pediatrics and Dermatology are priced at ₹800. Super-specialties like Cardiology and Orthopedics carry a s
+
+tial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera.
+
+Query: Can I cancel or move my appointment to another day?
+Top-1 similarity: 0.5022542245043191
+Fallback fired: False
+Sources: ['cancellation_rescheduling window.md', 'appointment-booking policy.md', 'follow-up-visit discount policy.md']
+Answer: # Cancellation and Rescheduling Rules
+
+**Document ID:** `KB-002`
+**Topic:** `cancellation/rescheduling window`
+
+---
+
+Appointments must be cancelled or rescheduled at least 24 hours prior to the scheduled time to avoid a cancellation fee. Late cancellations made within 24 hours will incur a flat pena
+
+# Patient Appointment Booking Policy
+
+**Document ID:** `KB-001`
+**Topic:** `appointment-booking policy`
+
+---
+
+Patients can book appointments up to 30 days in advance using our online patient portal or by calling our central desk. A valid government ID and up-to-date contact information are required
+
+# Follow-Up Visit Discount Policy
+
+**Document ID:** `KB-010`
+**Topic:** `follow-up-visit discount policy`
+
+---
+
+Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
+
+Query: How long do lab results take to come back?
+Top-1 similarity: 0.6458941418738222
+Fallback fired: False
+Sources: ['lab-test turnaround times.md', 'insurance-claim process.md']
+Answer: # Laboratory Test Turnaround Times
+
+**Document ID:** `KB-006`
+**Topic:** `lab-test turnaround times`
+
+---
+
+Standard blood and urine panel results are typically uploaded to the portal within 24 hours of sample collection. Specialized diagnostic tests, such as allergy panels or histopathology, may tak
+
+ such as allergy panels or histopathology, may take between 3 to 5 business days. Critical or abnormal lab results are immediately escalated to the ordering physician for patient follow-up.
+
+ures, patients must submit their claim approval documents at least 48 hours prior to admission. Reimbursement claims receive detailed itemized bills and discharge summaries within 3 business days post-visit.
+
+Query: Do I get a discount on a visit after a recent consultation?
+Top-1 similarity: 0.6497726829550196
+Fallback fired: False
+Sources: ['follow-up-visit discount policy.md', 'consultation-fee structure by specialty.md']
+Answer: # Follow-Up Visit Discount Policy
+
+**Document ID:** `KB-010`
+**Topic:** `follow-up-visit discount policy`
+
+---
+
+Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
+
+ppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate.
+
+# Consultation Fee Structure
+
+**Document ID:** `KB-003`
+**Topic:** `consultation-fee structure by specialty`
+
+---
+
+General Medicine consultations start at ₹500, while specialized visits such as Pediatrics and Dermatology are priced at ₹800. Super-specialties like Cardiology and Orthopedics carry a s
+
+Query: Can a doctor come to my house for a checkup?
+Top-1 similarity: 0.4144587185553552
+Fallback fired: False
+Sources: ['appointment-booking policy.md', 'home-visit eligibility.md', 'telemedicine eligibility.md']
+Answer: D and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.
+
+# Home-Visit Care Eligibility
+
+**Document ID:** `KB-012`
+**Topic:** `home-visit eligibility`
+
+---
+
+Home visit services are reserved for bedridden patients, elderly individuals with mobility constraints, or post-operative recovery care. Services include basic health assessments, blood sample collecti
+
+tial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera.
+
+Query: What is the capital of France?
+Top-1 similarity: 0.042606148333785177
+Fallback fired: True
+Sources: []
+Answer: I don't have that information in the clinic policy documents.

@@ -4,6 +4,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import chromadb
+from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
@@ -18,7 +19,10 @@ def _get_model() -> SentenceTransformer:
 
 @lru_cache(maxsize=1)
 def _get_client() -> chromadb.PersistentClient:
-    return chromadb.PersistentClient(path=CHROMA_PATH)
+    return chromadb.PersistentClient(
+        path=CHROMA_PATH,
+        settings=Settings(anonymized_telemetry=False),
+    )
 
 
 def retrieve(
@@ -48,9 +52,20 @@ def retrieve(
     ]
 
 
-def answer(query: str, collection_name: str, threshold: float) -> str:
-    """Return retrieved chunk text or the policy-document fallback."""
+def answer_with_context(
+    query: str, collection_name: str, threshold: float
+) -> tuple[str, list[str], str]:
+    """Return an answer with its unique source IDs and retrieved context."""
     chunks = retrieve(query, collection_name)
     if not chunks or chunks[0][2] < threshold:
-        return FALLBACK_ANSWER
-    return "\n\n".join(text for _, text, _ in chunks)
+        return FALLBACK_ANSWER, [], ""
+
+    sources = list(dict.fromkeys(doc_id for doc_id, _, _ in chunks))
+    context = "\n\n".join(text for _, text, _ in chunks)
+    return context, sources, context
+
+
+def answer(query: str, collection_name: str, threshold: float) -> str:
+    """Return retrieved chunk text or the policy-document fallback."""
+    answer_text, _, _ = answer_with_context(query, collection_name, threshold)
+    return answer_text

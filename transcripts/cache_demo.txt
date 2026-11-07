@@ -1,0 +1,5 @@
+Generation calls after first query: 1
+First call wall-clock seconds: 12.091460
+Generation calls after normalized repeat: 1
+Second call wall-clock seconds: 0.004006
+Results match: True

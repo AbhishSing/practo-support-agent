@@ -1,0 +1,13 @@
+Count per category:
+  General Medicine: 20
+  Cardiology: 10
+  Dermatology: 11
+  Pediatrics: 12
+  Orthopedics: 7
+Count per status:
+  Scheduled: 23
+  Completed: 14
+  Cancelled: 7
+  No-Show: 5
+  Rescheduled: 11
+Follow-up required: 28.3%

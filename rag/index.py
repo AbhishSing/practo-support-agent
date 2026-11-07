@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import chromadb
+from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
 from rag.chunking import fixed_chunks, sentence_chunks
@@ -42,7 +43,10 @@ def index_knowledge_base() -> None:
             )
 
     model = SentenceTransformer(EMBEDDING_MODEL)
-    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    client = chromadb.PersistentClient(
+        path=CHROMA_PATH,
+        settings=Settings(anonymized_telemetry=False),
+    )
 
     for strategy, collection_name in COLLECTIONS.items():
         chunks = chunks_by_strategy[strategy]
@@ -81,7 +85,10 @@ def index_knowledge_base() -> None:
 def index_document(doc_id: str, text: str) -> int:
     """Upsert one document's chunks into both collections and return their total."""
     model = SentenceTransformer(EMBEDDING_MODEL)
-    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    client = chromadb.PersistentClient(
+        path=CHROMA_PATH,
+        settings=Settings(anonymized_telemetry=False),
+    )
     total_chunks = 0
 
     for strategy, collection_name in COLLECTIONS.items():

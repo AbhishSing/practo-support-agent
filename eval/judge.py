@@ -119,19 +119,21 @@ def evaluate(cases: Iterable[EvaluationCase]) -> list[dict[str, Any]]:
 
 
 def run_retrieval_evaluation() -> list[dict[str, Any]]:
-    """Judge retrieved policy text as the candidate answer for each test query."""
-    from rag.retrieve import retrieve
+    """Judge answers from the real crew path against its retrieved context."""
+    from agents.crew import build_crew, kickoff_validated
+    from agents.tools import LAST_RETRIEVAL
+    from governance.cache import reset_cache
 
+    reset_cache()
+    crew = build_crew()
     cases = []
     for test_case in TESTSET:
-        chunks = retrieve(test_case["query"], collection_name="kb_sentence", k=5)
-        context = "\n\n".join(text for _, text, _ in chunks)
-        answer = context or "I don't have that information in the clinic policy documents."
+        response = kickoff_validated(crew, test_case["query"])
         cases.append(
             {
                 **test_case,
-                "answer": answer,
-                "context": context,
+                "answer": response.answer,
+                "context": str(LAST_RETRIEVAL["context"]),
             }
         )
     return evaluate(cases)

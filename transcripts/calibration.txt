@@ -1,0 +1,20 @@
+
+kb_fixed
+In-scope top-1 similarities:
+  How much is a cardiology consultation? -> 0.7183
+  Can I cancel my appointment? -> 0.4704
+  How long do lab results take? -> 0.6516
+Out-of-scope top-1 similarities:
+  What is the capital of France? -> 0.0426
+  Recommend a good laptop. -> 0.1953
+Cluster gap (min in-scope - max out-of-scope): 0.2751
+
+kb_sentence
+In-scope top-1 similarities:
+  How much is a cardiology consultation? -> 0.6721
+  Can I cancel my appointment? -> 0.5236
+  How long do lab results take? -> 0.7310
+Out-of-scope top-1 similarities:
+  What is the capital of France? -> 0.0014
+  Recommend a good laptop. -> 0.1627
+Cluster gap (min in-scope - max out-of-scope): 0.3609

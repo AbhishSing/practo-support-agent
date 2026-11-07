@@ -1,0 +1,2 @@
+kb_fixed: 24 chunks indexed
+kb_sentence: 12 chunks indexed

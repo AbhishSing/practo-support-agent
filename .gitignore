@@ -24,6 +24,8 @@ htmlcov/
 !.env.example
 *.sqlite3
 *.db
+chroma_db/
+logs/
 
 # Editor and OS files
 .DS_Store

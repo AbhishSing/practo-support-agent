@@ -1,13 +1,17 @@
 """Sequential Retrieval, Lookup, and Composer crew with deterministic demos."""
 
+import asyncio
 import os
 
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
 
 from crewai import Agent, Crew, Process, Task
 
+from agents.guardrails import detect_injection, is_grounded, mask_pii
 from agents.tools import (
     DAYS_SINCE_CREATED_P80,
+    LAST_APPOINTMENT_LOOKUP,
+    LAST_RETRIEVAL,
     TOOL_CALLS,
     check_appointment_status,
     rag_lookup,
@@ -25,6 +29,7 @@ DEMO_QUERIES = (
     ("policy question", "Can I cancel my appointment?"),
     ("appointment status", "What is the status of APT-0007?"),
 )
+LAST_REVIEW_VERDICT: object | None = None
 
 
 def build_crew() -> Crew:
@@ -87,20 +92,63 @@ def build_crew() -> Crew:
 
 def kickoff_validated(crew: Crew, query: str) -> AgentResponse:
     """Run the crew and validate its response against the API response schema."""
+    masked_query, _flags = mask_pii(query)
+    if detect_injection(masked_query):
+        return validate_agent_response(
+            {
+                "answer": "I can't process that request.",
+                "sources": [],
+                "tool_used": [],
+                "escalation_score": None,
+                "grounded": False,
+            }
+        )
 
-    check_budget(query)
-    return cached_call(query, lambda: _kickoff_validated(crew, query))
+    check_budget(masked_query)
+    return cached_call(
+        masked_query,
+        lambda: _kickoff_validated(crew, masked_query),
+    )
 
 
 def _kickoff_validated(crew: Crew, query: str) -> AgentResponse:
+    global LAST_REVIEW_VERDICT
+    reset_tool_call_log()
     result = crew.kickoff(inputs={"query": query})
     raw_answer = getattr(result, "raw", result)
+    answer = raw_answer if isinstance(raw_answer, str) else str(raw_answer)
+    if os.getenv("GUARDRAIL_TEST_INJECT_UNGROUNDED") == "1":
+        answer = (
+            f"{answer.rstrip().rstrip('.')}."
+            " Consultations are free on Sundays."
+        )
+
+    grounded = is_grounded(answer, str(LAST_RETRIEVAL["context"]))
+    draft = answer
+    guarded_answer = (
+        draft
+        if grounded
+        else "I don't have that information in the clinic policy documents."
+    )
+
+    from review.autogen_review import review_draft
+
+    verdict = asyncio.run(
+        review_draft(draft, str(LAST_RETRIEVAL["context"]))
+    )
+    LAST_REVIEW_VERDICT = verdict
+    answer = verdict.final_answer if not verdict.approved else guarded_answer
+
     response_data = {
-        "answer": raw_answer if isinstance(raw_answer, str) else str(raw_answer),
-        "sources": [],
+        "answer": answer,
+        "sources": list(LAST_RETRIEVAL["sources"]),
         "tool_used": list(TOOL_CALLS),
-        "escalation_score": None,
-        "grounded": bool(TOOL_CALLS),
+        "escalation_score": (
+            LAST_APPOINTMENT_LOOKUP["escalation_score"]
+            if LAST_APPOINTMENT_LOOKUP
+            else None
+        ),
+        "grounded": grounded,
     }
     return validate_agent_response(response_data)
 
