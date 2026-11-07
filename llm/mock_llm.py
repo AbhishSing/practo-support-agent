@@ -14,6 +14,11 @@ _TOOL_BLOCK_PATTERN = re.compile(
     r"Tool Arguments:\s*(?P<arguments>.*?)(?=\nTool Description:|\nTool Name:|\Z)",
     re.DOTALL,
 )
+_QUESTION_PATTERN = re.compile(
+    r"(?:^|\n)(?:Current Task:\s*)?Question:\s*(.+?)(?=\n(?:Thought:|Observation:|Final Answer:)"
+    r"|\n\n(?:This is the expected criteria|Begin!)|\Z)",
+    re.DOTALL,
+)
 _ID_ARGUMENT_NAMES = {"appointment_id", "booking_id", "record_id"}
 _QUERY_ARGUMENT_NAMES = {"query", "question", "search_query"}
 _CLINIC_KEYWORDS = {
@@ -84,7 +89,9 @@ class MockLLM(BaseLLM):
             messages, {name for name, _ in schemas}
         )
         if tool_output is not None:
-            return f"Summary of the latest tool output: {_to_text(tool_output)}"
+            return _final_answer(
+                f"Summary of the latest tool output: {_to_text(tool_output)}"
+            )
 
         selected = _select_tool(query, schemas)
         if selected is not None:
@@ -94,7 +101,7 @@ class MockLLM(BaseLLM):
                 f"Action Input: {json.dumps(arguments, sort_keys=True)}"
             )
 
-        return "No tool output is available to summarize."
+        return _final_answer("No tool output is available to summarize.")
 
 
 def _message_text(messages: str | Sequence[Mapping[str, Any]]) -> str:
@@ -109,21 +116,13 @@ def _message_text(messages: str | Sequence[Mapping[str, Any]]) -> str:
 
 def _latest_user_text(messages: str | Sequence[Mapping[str, Any]]) -> str:
     if isinstance(messages, str):
-        question_matches = re.findall(
-            r"(?:^|\n)Question:\s*(.+?)(?=\n(?:Thought:|Observation:|Final Answer:)|\Z)",
-            messages,
-            flags=re.DOTALL,
-        )
+        question_matches = _QUESTION_PATTERN.findall(messages)
         return question_matches[-1].strip() if question_matches else messages.strip()
 
     for message in reversed(messages):
         if isinstance(message, Mapping) and message.get("role") == "user":
             content = _to_text(message.get("content", "")).strip()
-            question_matches = re.findall(
-                r"(?:^|\n)Question:\s*(.+?)(?=\n(?:Thought:|Observation:|Final Answer:)|\Z)",
-                content,
-                flags=re.DOTALL,
-            )
+            question_matches = _QUESTION_PATTERN.findall(content)
             return question_matches[-1].strip() if question_matches else content
     return ""
 
@@ -241,10 +240,10 @@ def _select_tool(
 def _latest_tool_output(
     messages: str | Sequence[Mapping[str, Any]], tool_names: set[str]
 ) -> Any | None:
+    names_pattern = "|".join(re.escape(name) for name in sorted(tool_names))
     if isinstance(messages, str):
         if not tool_names:
             return None
-        names_pattern = "|".join(re.escape(name) for name in sorted(tool_names))
         actions = list(
             re.finditer(
                 rf"(?m)^Action:\s*(?:{names_pattern})\s*$",
@@ -277,15 +276,15 @@ def _latest_tool_output(
         ),
         default=-1,
     )
-    for message in reversed(normalized):
-        if message.get("role") in {"tool", "function"}:
-            return message.get("content", "")
     if last_action_index < 0:
+        for message in reversed(normalized):
+            if message.get("role") in {"tool", "function"}:
+                return message.get("content", "")
         for message in reversed(normalized):
             if message.get("role") != "user":
                 continue
             summaries = re.findall(
-                r"Summary of the latest tool output:\s*(.*?)(?=\n(?:Summary of the latest tool output:|Task output:)|\Z)",
+                r"Summary of the latest tool output:\s*(.*?)(?=\n(?:Summary of the latest tool output:|Task output:|Thought:)|\n\nBegin!|\Z)",
                 _to_text(message.get("content", "")),
                 flags=re.DOTALL,
             )
@@ -293,17 +292,60 @@ def _latest_tool_output(
                 return summaries[-1].strip()
         return None
 
-    for message in reversed(normalized[last_action_index + 1 :]):
+    if last_action_index >= 0:
+        action_message = _to_text(
+            normalized[last_action_index].get("content", "")
+        )
+        action_match = re.search(
+            rf"(?m)^Action:\s*(?:{names_pattern})\s*$",
+            action_message,
+        )
+        if action_match is not None:
+            action_input = re.search(
+                r"(?m)^Action Input:\s*.*$",
+                action_message[action_match.end() :],
+            )
+            if action_input is not None:
+                observation_start = (
+                    action_match.end() + action_input.end()
+                )
+                observations = re.findall(
+                    r"(?:^|\n)Observation:\s*(.*?)(?=\n(?:Thought:|Action:|Final Answer:|Now it's time)|\Z)",
+                    action_message[observation_start:],
+                    flags=re.DOTALL,
+                )
+                if observations:
+                    return observations[-1].strip()
+
+        for message in reversed(normalized[last_action_index + 1 :]):
+            if message.get("role") in {"tool", "function"}:
+                return message.get("content", "")
+
+        for message in reversed(normalized[:last_action_index]):
+            if message.get("role") != "assistant":
+                continue
+            content = _to_text(message.get("content", ""))
+            if not re.search(
+                rf"(?m)^Action:\s*(?:{names_pattern})\s*$",
+                content,
+            ):
+                return content
+
+    for message in reversed(normalized):
         if message.get("role") == "user":
             content = _to_text(message.get("content", ""))
             observations = re.findall(
-                r"(?:^|\n)Observation:\s*(.*?)(?=\n(?:Thought:|Action:|Final Answer:)|\Z)",
+                r"(?:^|\n)Observation:\s*(.*?)(?=\n(?:Thought:|Action:|Final Answer:|Now it's time)|\Z)",
                 content,
                 flags=re.DOTALL,
             )
             if observations:
                 return observations[-1].strip()
     return None
+
+
+def _final_answer(text: str) -> str:
+    return f"Thought: I now know the final answer\nFinal Answer: {text}"
 
 
 def _to_text(value: Any) -> str:
