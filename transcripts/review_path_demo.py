@@ -31,10 +31,11 @@ def main() -> None:
             query,
         )
         verdict = crew_module.LAST_REVIEW_VERDICT
-        if verdict is None:
-            raise RuntimeError("The production request path did not run review.")
         print(f"Query: {query}")
-        print(f"Review verdict:\n{verdict.model_dump_json(indent=2)}")
+        if verdict is None:
+            print("Review verdict: skipped after groundedness refusal")
+        else:
+            print(f"Review verdict:\n{verdict.model_dump_json(indent=2)}")
         print(f"AgentResponse: {response.model_dump(mode='json')}")
 
     os.environ.pop("GUARDRAIL_TEST_INJECT_UNGROUNDED", None)

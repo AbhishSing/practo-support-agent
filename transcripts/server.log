@@ -1,19 +1,18 @@
-INFO:     Started server process [16343]
+INFO:     Started server process [21895]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:63204 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63206 - "POST /ask HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63211 - "POST /add-document HTTP/1.1" 200 OK
-INFO:     ('127.0.0.1', 63213) - "WebSocket /ws/chat" [accepted]
+INFO:     127.0.0.1:64768 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64769 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64770 - "POST /ask HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64775 - "POST /add-document HTTP/1.1" 200 OK
+INFO:     ('127.0.0.1', 64776) - "WebSocket /ws/chat" [accepted]
 INFO:     connection open
 INFO:     connection closed
-INFO:     ('127.0.0.1', 63214) - "WebSocket /ws/chat" [accepted]
+INFO:     ('127.0.0.1', 64777) - "WebSocket /ws/chat" [accepted]
 INFO:     connection open
 INFO:     connection closed
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [16343]
-/Users/abhishek/.local/share/uv/python/cpython-3.11.18-macos-aarch64-none/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
-  warnings.warn('resource_tracker: There appear to be %d '
+INFO:     Finished server process [21895]

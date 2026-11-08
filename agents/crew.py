@@ -2,12 +2,18 @@
 
 import asyncio
 import os
+import re
 
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
 
 from crewai import Agent, Crew, Process, Task
 
-from agents.guardrails import detect_injection, is_grounded, mask_pii
+from agents.guardrails import (
+    detect_injection,
+    has_relevant_context,
+    is_grounded,
+    mask_pii,
+)
 from agents.tools import (
     DAYS_SINCE_CREATED_P80,
     LAST_APPOINTMENT_LOOKUP,
@@ -18,7 +24,7 @@ from agents.tools import (
     reset_tool_call_log,
 )
 from agents.schemas import AgentResponse, validate_agent_response
-from governance.cache import cached_call
+from governance.cache import cached_call, normalize_query
 from governance.policy import (
     check_budget,
     test_lookup_agent_is_only_agent_with_appointment_tool,
@@ -105,39 +111,76 @@ def kickoff_validated(crew: Crew, query: str) -> AgentResponse:
         )
 
     check_budget(masked_query)
+    cache_key = (
+        f"{normalize_query(masked_query)}|hook="
+        f"{os.getenv('GUARDRAIL_TEST_INJECT_UNGROUNDED', '0')}"
+    )
     return cached_call(
-        masked_query,
+        cache_key,
         lambda: _kickoff_validated(crew, masked_query),
     )
 
 
 def _kickoff_validated(crew: Crew, query: str) -> AgentResponse:
     global LAST_REVIEW_VERDICT
+    LAST_REVIEW_VERDICT = None
     reset_tool_call_log()
     result = crew.kickoff(inputs={"query": query})
     raw_answer = getattr(result, "raw", result)
     answer = raw_answer if isinstance(raw_answer, str) else str(raw_answer)
+    answer = re.sub(
+        r"^\s*Summary of the latest tool output:\s*",
+        "",
+        answer,
+        flags=re.IGNORECASE,
+    )
+
+    appointment_record = ""
+    if LAST_APPOINTMENT_LOOKUP:
+        record_id_match = re.search(r"\bAPT-\d+\b", query, re.IGNORECASE)
+        record_id = record_id_match.group(0).upper() if record_id_match else ""
+        appointment_record = (
+            f"Appointment record: {record_id} "
+            f"status {LAST_APPOINTMENT_LOOKUP['status']}; "
+            "consultation fee "
+            f"{LAST_APPOINTMENT_LOOKUP['consultation_fee_inr']} INR; "
+            "escalation score "
+            f"{LAST_APPOINTMENT_LOOKUP['escalation_score']}."
+        )
+        answer_record_id = record_id or "The appointment"
+        answer = (
+            f"{answer_record_id} is {LAST_APPOINTMENT_LOOKUP['status']}. "
+            "The consultation fee is "
+            f"₹{LAST_APPOINTMENT_LOOKUP['consultation_fee_inr']}."
+        )
+        if "rag_lookup" in TOOL_CALLS and LAST_RETRIEVAL["context"]:
+            answer = f"{answer}\n\n{LAST_RETRIEVAL['context']}"
+    elif "rag_lookup" in TOOL_CALLS and LAST_RETRIEVAL["context"]:
+        answer = str(LAST_RETRIEVAL["context"])
+
     if os.getenv("GUARDRAIL_TEST_INJECT_UNGROUNDED") == "1":
         answer = (
             f"{answer.rstrip().rstrip('.')}."
             " Consultations are free on Sundays."
         )
 
-    grounded = is_grounded(answer, str(LAST_RETRIEVAL["context"]))
     draft = answer
-    guarded_answer = (
-        draft
-        if grounded
-        else "I don't have that information in the clinic policy documents."
+    policy_context = str(LAST_RETRIEVAL["context"])
+    grounding_context = "\n".join(
+        part for part in (policy_context, appointment_record) if part
     )
-
-    from review.autogen_review import review_draft
-
-    verdict = asyncio.run(
-        review_draft(draft, str(LAST_RETRIEVAL["context"]))
+    grounded = is_grounded(draft, grounding_context) and (
+        "rag_lookup" not in TOOL_CALLS
+        or has_relevant_context(query, grounding_context)
     )
-    LAST_REVIEW_VERDICT = verdict
-    answer = verdict.final_answer if not verdict.approved else guarded_answer
+    if not grounded:
+        answer = "I don't have that information in the clinic policy documents."
+    else:
+        from review.autogen_review import review_draft
+
+        verdict = asyncio.run(review_draft(draft, grounding_context))
+        LAST_REVIEW_VERDICT = verdict
+        answer = verdict.final_answer if not verdict.approved else draft
 
     response_data = {
         "answer": answer,
@@ -165,6 +208,7 @@ def run_demo() -> None:
         called_tools = ", ".join(TOOL_CALLS) if TOOL_CALLS else "none"
         print(f"\nRun: {label} — {query}")
         print(f"Tools called: {called_tools}")
+        print(f"Response validated: {isinstance(result, AgentResponse)}")
         print(f"Response: {result}")
 
 

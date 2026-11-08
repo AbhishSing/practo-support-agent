@@ -38,6 +38,25 @@ _NON_CONTENT_WORDS = {
     "will",
     "with",
 }
+_GENERIC_QUERY_WORDS = {
+    "appointment",
+    "can",
+    "clinic",
+    "current",
+    "do",
+    "how",
+    "i",
+    "is",
+    "me",
+    "my",
+    "please",
+    "tell",
+    "the",
+    "what",
+    "when",
+    "who",
+    "your",
+}
 
 
 def mask_pii(text: str) -> tuple[str, list[str]]:
@@ -69,6 +88,38 @@ def is_grounded(answer: str, context: str) -> bool:
         for sentence in _SENTENCE_PATTERN.split(answer)
         if (sentence_words := set(_content_words(sentence)))
     )
+
+
+def has_relevant_context(query: str, context: str) -> bool:
+    """Require at least two non-generic query terms to match retrieved evidence."""
+    query_words = {
+        _normalize_relevance_word(word)
+        for word in _content_words(query)
+        if word not in _GENERIC_QUERY_WORDS
+    }
+    context_words = {
+        _normalize_relevance_word(word) for word in _content_words(context)
+    }
+    return len(query_words & context_words) >= min(2, len(query_words))
+
+
+def _normalize_relevance_word(word: str) -> str:
+    if word.endswith("ations"):
+        word = word[:-5]
+    elif word.endswith("ation"):
+        word = word[:-5]
+    elif word.endswith("ing"):
+        word = word[:-3]
+    elif word.endswith("ed"):
+        word = word[:-2]
+    elif word.endswith("s") and len(word) > 3:
+        word = word[:-1]
+
+    if len(word) > 3 and word[-1] == word[-2]:
+        word = word[:-1]
+    if word.endswith("ul"):
+        word += "e"
+    return word
 
 
 def _content_words(text: str) -> list[str]:

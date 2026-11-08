@@ -1,0 +1,3 @@
+HTTP status: 200
+Logged request: Please check APT-0007 for [PHONE_MASKED]
+Raw phone number appeared in this log entry: no

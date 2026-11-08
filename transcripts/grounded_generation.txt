@@ -1,7 +1,7 @@
 Query: How much is a cardiology consultation?
 Top-1 similarity: 0.7183034945217283
 Fallback fired: False
-Sources: ['consultation-fee structure by specialty.md', 'telemedicine eligibility.md']
+Sources: ['consultation-fee structure by specialty.md', 'telemedicine eligibility.md', 'follow-up-visit discount policy.md', 'appointment-booking policy.md', 'second-opinion process.md']
 Answer: cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation.
 
 # Consultation Fee Structure
@@ -15,10 +15,41 @@ General Medicine consultations start at ₹500, while specialized visits such as
 
 tial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera.
 
+# Follow-Up Visit Discount Policy
+
+**Document ID:** `KB-010`
+**Topic:** `follow-up-visit discount policy`
+
+---
+
+Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
+
+ppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate.
+
+D and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.
+
+# Second-Opinion Consultation Process
+
+**Document ID:** `KB-011`
+**Topic:** `second-opinion process`
+
+---
+
+To request a second opinion, patients can upload their existing medical records, diagnostic scans, and clinical notes to the portal. A senior specialist reviews the submitted documentation and
+
+# Patient Appointment Booking Policy
+
+**Document ID:** `KB-001`
+**Topic:** `appointment-booking policy`
+
+---
+
+Patients can book appointments up to 30 days in advance using our online patient portal or by calling our central desk. A valid government ID and up-to-date contact information are required
+
 Query: Can I cancel or move my appointment to another day?
 Top-1 similarity: 0.5022542245043191
 Fallback fired: False
-Sources: ['cancellation_rescheduling window.md', 'appointment-booking policy.md', 'follow-up-visit discount policy.md']
+Sources: ['cancellation_rescheduling window.md', 'appointment-booking policy.md', 'follow-up-visit discount policy.md', 'prescription-refill policy.md']
 Answer: # Cancellation and Rescheduling Rules
 
 **Document ID:** `KB-002`
@@ -46,10 +77,27 @@ Patients can book appointments up to 30 days in advance using our online patient
 
 Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
 
+D and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.
+
+ppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate.
+
+ns cannot be refilled without an updated physical or telemedicine consultation. Patients can submit refill requests directly via the patient mobile app.
+
+# Medication Prescription Refill Guidelines
+
+**Document ID:** `KB-005`
+**Topic:** `prescription-refill policy`
+
+---
+
+Refill requests for chronic maintenance medications require 48 hours processing time. Controlled substances and specialized medications cannot be refilled without an updated physical
+
+ations made within 24 hours will incur a flat penalty charge of ₹500. Patients can easily reschedule their slots online or via our automated WhatsApp assistant.
+
 Query: How long do lab results take to come back?
 Top-1 similarity: 0.6458941418738222
 Fallback fired: False
-Sources: ['lab-test turnaround times.md', 'insurance-claim process.md']
+Sources: ['lab-test turnaround times.md', 'insurance-claim process.md', 'second-opinion process.md', 'home-visit eligibility.md', 'follow-up-visit discount policy.md', 'prescription-refill policy.md']
 Answer: # Laboratory Test Turnaround Times
 
 **Document ID:** `KB-006`
@@ -63,10 +111,34 @@ Standard blood and urine panel results are typically uploaded to the portal with
 
 ures, patients must submit their claim approval documents at least 48 hours prior to admission. Reimbursement claims receive detailed itemized bills and discharge summaries within 3 business days post-visit.
 
+pecialist reviews the submitted documentation and provides a detailed written assessment within 48 hours. Optional 20-minute video discussions can also be scheduled to review complex diagnoses.
+
+de basic health assessments, blood sample collection, and routine wound dressing by licensed nursing staff. Requests must be placed at least 24 hours in advance and are subject to geographical service zone availability.
+
+ppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate.
+
+# Follow-Up Visit Discount Policy
+
+**Document ID:** `KB-010`
+**Topic:** `follow-up-visit discount policy`
+
+---
+
+Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
+
+# Medication Prescription Refill Guidelines
+
+**Document ID:** `KB-005`
+**Topic:** `prescription-refill policy`
+
+---
+
+Refill requests for chronic maintenance medications require 48 hours processing time. Controlled substances and specialized medications cannot be refilled without an updated physical
+
 Query: Do I get a discount on a visit after a recent consultation?
 Top-1 similarity: 0.6497726829550196
 Fallback fired: False
-Sources: ['follow-up-visit discount policy.md', 'consultation-fee structure by specialty.md']
+Sources: ['follow-up-visit discount policy.md', 'consultation-fee structure by specialty.md', 'appointment-booking policy.md', 'home-visit eligibility.md', 'second-opinion process.md']
 Answer: # Follow-Up Visit Discount Policy
 
 **Document ID:** `KB-010`
@@ -87,10 +159,41 @@ ppointments scheduled between 8 to 14 days post-visit receive a 25% discount. An
 
 General Medicine consultations start at ₹500, while specialized visits such as Pediatrics and Dermatology are priced at ₹800. Super-specialties like Cardiology and Orthopedics carry a s
 
+cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation.
+
+# Patient Appointment Booking Policy
+
+**Document ID:** `KB-001`
+**Topic:** `appointment-booking policy`
+
+---
+
+Patients can book appointments up to 30 days in advance using our online patient portal or by calling our central desk. A valid government ID and up-to-date contact information are required
+
+# Home-Visit Care Eligibility
+
+**Document ID:** `KB-012`
+**Topic:** `home-visit eligibility`
+
+---
+
+Home visit services are reserved for bedridden patients, elderly individuals with mobility constraints, or post-operative recovery care. Services include basic health assessments, blood sample collecti
+
+D and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.
+
+# Second-Opinion Consultation Process
+
+**Document ID:** `KB-011`
+**Topic:** `second-opinion process`
+
+---
+
+To request a second opinion, patients can upload their existing medical records, diagnostic scans, and clinical notes to the portal. A senior specialist reviews the submitted documentation and
+
 Query: Can a doctor come to my house for a checkup?
 Top-1 similarity: 0.4144587185553552
 Fallback fired: False
-Sources: ['appointment-booking policy.md', 'home-visit eligibility.md', 'telemedicine eligibility.md']
+Sources: ['appointment-booking policy.md', 'home-visit eligibility.md', 'telemedicine eligibility.md', 'patient-data privacy policy.md', 'consultation-fee structure by specialty.md', 'follow-up-visit discount policy.md']
 Answer: D and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.
 
 # Home-Visit Care Eligibility
@@ -103,6 +206,30 @@ Answer: D and up-to-date contact information are required during registration. S
 Home visit services are reserved for bedridden patients, elderly individuals with mobility constraints, or post-operative recovery care. Services include basic health assessments, blood sample collecti
 
 tial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera.
+
+dical information is never shared with third parties without explicit written consent from the patient or legal guardian. Patients retain full rights to request, inspect, or export their electronic health records at any time.
+
+cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation.
+
+de basic health assessments, blood sample collection, and routine wound dressing by licensed nursing staff. Requests must be placed at least 24 hours in advance and are subject to geographical service zone availability.
+
+# Follow-Up Visit Discount Policy
+
+**Document ID:** `KB-010`
+**Topic:** `follow-up-visit discount policy`
+
+---
+
+Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
+
+# Telemedicine Eligibility Criteria
+
+**Document ID:** `KB-007`
+**Topic:** `telemedicine eligibility`
+
+---
+
+Telemedicine visits are available for routine follow-ups, minor General Medicine concerns, skin symptom reviews, and prescription renewals. Initial consultations for acute cardiac issues or sev
 
 Query: What is the capital of France?
 Top-1 similarity: 0.042606148333785177

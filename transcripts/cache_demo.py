@@ -1,5 +1,6 @@
 """Verify normalized-query caching on the actual crew request path."""
 
+import os
 import sys
 import time
 from pathlib import Path
@@ -30,6 +31,15 @@ def main() -> None:
     print(f"Generation calls after normalized repeat: {get_call_count()}")
     print(f"Second call wall-clock seconds: {second_duration:.6f}")
     print(f"Results match: {first == second}")
+
+    os.environ["GUARDRAIL_TEST_INJECT_UNGROUNDED"] = "1"
+    hooked = kickoff_validated(
+        build_crew(),
+        "Can I cancel my appointment?",
+    )
+    os.environ.pop("GUARDRAIL_TEST_INJECT_UNGROUNDED", None)
+    print(f"Generation calls after enabling test hook: {get_call_count()}")
+    print(f"Hooked result differs from cached normal result: {hooked != first}")
 
 
 if __name__ == "__main__":

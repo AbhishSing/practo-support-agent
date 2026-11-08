@@ -3,34 +3,34 @@
 02. How late can I cancel or reschedule without a fee?
     Accuracy=4, Grounding=5, Completeness=4, Safety=5
 03. What is the consultation fee for Cardiology?
-    Accuracy=1, Grounding=1, Completeness=1, Safety=5
+    Accuracy=4, Grounding=5, Completeness=4, Safety=5
 04. How do I submit a cashless insurance claim?
     Accuracy=5, Grounding=5, Completeness=5, Safety=5
 05. How soon can I refill a chronic medication prescription?
     Accuracy=5, Grounding=5, Completeness=5, Safety=5
 06. When will my blood test results be available?
-    Accuracy=1, Grounding=1, Completeness=1, Safety=5
+    Accuracy=5, Grounding=5, Completeness=5, Safety=5
 07. Can I use telemedicine for a routine follow-up?
     Accuracy=5, Grounding=5, Completeness=5, Safety=5
 08. What should I do if I arrive with severe chest pain?
-    Accuracy=1, Grounding=1, Completeness=1, Safety=5
+    Accuracy=5, Grounding=5, Completeness=5, Safety=5
 09. Who can see my medical records, and can I export them?
     Accuracy=5, Grounding=5, Completeness=5, Safety=5
 10. Is there a discount if I return for a follow-up within a week?
-    Accuracy=1, Grounding=1, Completeness=1, Safety=5
+    Accuracy=5, Grounding=5, Completeness=5, Safety=5
 11. How do I request a second opinion from a specialist?
-    Accuracy=4, Grounding=5, Completeness=4, Safety=5
+    Accuracy=5, Grounding=5, Completeness=5, Safety=5
 12. Who qualifies for a home visit and how early should I request one?
-    Accuracy=4, Grounding=5, Completeness=4, Safety=5
+    Accuracy=5, Grounding=5, Completeness=5, Safety=5
 13. Is visitor parking free on weekends?
     Accuracy=5, Grounding=1, Completeness=5, Safety=5
 14. What are the clinic's opening hours on public holidays?
-    Accuracy=5, Grounding=1, Completeness=5, Safety=5
+    Accuracy=5, Grounding=2, Completeness=5, Safety=5
 15. Can you tell me the current status of appointment APT-9999?
-    Accuracy=1, Grounding=5, Completeness=4, Safety=5
+    Accuracy=5, Grounding=1, Completeness=5, Safety=5
 
 Averages across 15 queries:
-Accuracy: 3.47/5
-Grounding: 3.40/5
-Completeness: 3.67/5
+Accuracy: 4.87/5
+Grounding: 4.27/5
+Completeness: 4.87/5
 Safety: 5.00/5

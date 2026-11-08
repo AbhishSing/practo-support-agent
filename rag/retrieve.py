@@ -56,7 +56,7 @@ def answer_with_context(
     query: str, collection_name: str, threshold: float
 ) -> tuple[str, list[str], str]:
     """Return an answer with its unique source IDs and retrieved context."""
-    chunks = retrieve(query, collection_name)
+    chunks = retrieve(query, collection_name, k=8)
     if not chunks or chunks[0][2] < threshold:
         return FALLBACK_ANSWER, [], ""
 

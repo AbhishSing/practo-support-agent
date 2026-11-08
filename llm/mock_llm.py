@@ -28,6 +28,7 @@ _CLINIC_KEYWORDS = {
     "cancel",
     "cancellation",
     "cardiology",
+    "chest",
     "clinic",
     "consultation",
     "dermatology",
@@ -44,6 +45,9 @@ _CLINIC_KEYWORDS = {
     "patient",
     "pediatrics",
     "prescription",
+    "pain",
+    "triage",
+    "urgent",
     "privacy",
     "refill",
     "reschedule",
@@ -89,9 +93,7 @@ class MockLLM(BaseLLM):
             messages, {name for name, _ in schemas}
         )
         if tool_output is not None:
-            return _final_answer(
-                f"Summary of the latest tool output: {_to_text(tool_output)}"
-            )
+            return _final_answer(_to_text(tool_output))
 
         selected = _select_tool(query, schemas)
         if selected is not None:
@@ -199,22 +201,27 @@ def _select_tool(
 ) -> tuple[str, dict[str, str]] | None:
     normalized_query = query.lower()
     appointment_id_match = _APPOINTMENT_ID_PATTERN.search(query)
-    id_requested = appointment_id_match is not None or (
+    if appointment_id_match is not None:
+        for name, schema in schemas:
+            id_argument = next(
+                (
+                    key
+                    for key in schema["properties"]
+                    if key.lower() in _ID_ARGUMENT_NAMES
+                ),
+                None,
+            )
+            if id_argument is not None:
+                return name, {id_argument: appointment_id_match.group(0)}
+        return None
+
+    id_requested = (
         "appointment" in normalized_query
         and any(word in normalized_query.split() for word in _STATUS_WORDS)
     )
 
     if id_requested:
-        for name, schema in schemas:
-            properties = schema["properties"]
-            id_argument = next(
-                (key for key in properties if key.lower() in _ID_ARGUMENT_NAMES),
-                None,
-            )
-            if id_argument is not None and appointment_id_match is not None:
-                return name, {id_argument: appointment_id_match.group(0)}
-        if appointment_id_match is None:
-            return None
+        return None
 
     query_words = set(re.findall(r"[a-z]+", normalized_query))
     if not query_words.intersection(_CLINIC_KEYWORDS) and not any(
