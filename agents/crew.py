@@ -35,6 +35,10 @@ DEMO_QUERIES = (
     ("policy question", "Can I cancel my appointment?"),
     ("appointment status", "What is the status of APT-0007?"),
 )
+REVIEW_CLAIM_TEST_SENTENCE = (
+    "Cardiology and Orthopedics consultations carry a standard consultation "
+    "fee of ₹1,200, and Consultations are free on Sundays."
+)
 LAST_REVIEW_VERDICT: object | None = None
 
 
@@ -113,7 +117,9 @@ def kickoff_validated(crew: Crew, query: str) -> AgentResponse:
     check_budget(masked_query)
     cache_key = (
         f"{normalize_query(masked_query)}|hook="
-        f"{os.getenv('GUARDRAIL_TEST_INJECT_UNGROUNDED', '0')}"
+        f"ungrounded:{os.getenv('GUARDRAIL_TEST_INJECT_UNGROUNDED', '0')};"
+        "review_claim:"
+        f"{os.getenv('GUARDRAIL_TEST_INJECT_REVIEW_CLAIM', '0')}"
     )
     return cached_call(
         cache_key,
@@ -162,6 +168,11 @@ def _kickoff_validated(crew: Crew, query: str) -> AgentResponse:
         answer = (
             f"{answer.rstrip().rstrip('.')}."
             " Consultations are free on Sundays."
+        )
+    if os.getenv("GUARDRAIL_TEST_INJECT_REVIEW_CLAIM") == "1":
+        answer = (
+            f"{answer.rstrip().rstrip('.')}."
+            f" {REVIEW_CLAIM_TEST_SENTENCE}"
         )
 
     draft = answer

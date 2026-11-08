@@ -1,7 +1,9 @@
 Generation calls after first query: 1
-First call wall-clock seconds: 4.786239
+First call wall-clock seconds: 5.270637
 Generation calls after normalized repeat: 1
-Second call wall-clock seconds: 0.004121
+Second call wall-clock seconds: 0.004818
 Results match: True
 Generation calls after enabling test hook: 2
 Hooked result differs from cached normal result: True
+Generation calls after enabling review-claim hook: 3
+Review-claim result differs from cached normal result: True

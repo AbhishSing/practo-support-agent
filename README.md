@@ -105,14 +105,19 @@ category for medical data.
   turn. Run `python -m governance.policy` to see the rejection demo.
 - **Query cache:** grounded-generation results are held in memory using
   the normalized, lower-cased query plus the
-  `GUARDRAIL_TEST_INJECT_UNGROUNDED` state as the key. This prevents a demo-hook
-  response from being reused for an ordinary request. The captured
+  states of both guardrail test hooks as key components. This prevents a
+  demo-hook response from being reused for an ordinary request. The captured
   [`transcripts/cache_demo.txt`](./transcripts/cache_demo.txt) shows a normalized
-  cache hit and a separate hook-enabled generation.
-- **Guardrail test hook:** setting `GUARDRAIL_TEST_INJECT_UNGROUNDED=1` appends
-  the deliberately unsupported Sunday-consultation claim before groundedness
-  validation. It is for demonstrations only, is included in the cache key,
-  and should be unset for ordinary requests.
+  cache hit and separate generations for each hook state.
+- **Guardrail test hooks:** both `GUARDRAIL_TEST_INJECT_UNGROUNDED` and
+  `GUARDRAIL_TEST_INJECT_REVIEW_CLAIM` are off by default and intended only for
+  demonstrations. The first injects a claim rejected by groundedness, shown
+  in [`transcripts/guardrail_demo.txt`](./transcripts/guardrail_demo.txt) and
+  Case C of [`transcripts/review_path_demo.txt`](./transcripts/review_path_demo.txt).
+  The second injects a mostly grounded draft with an unsupported Sunday claim,
+  exercising review and revision in Case B of
+  [`transcripts/review_path_demo.txt`](./transcripts/review_path_demo.txt).
+  Both hook states are included in the cache key.
 
 ## Guardrails
 
@@ -123,9 +128,25 @@ unsupported draft is replaced with the clinic-policy fallback before review.
 Only grounded drafts proceed to the AutoGen review stage. The
 [`transcripts/guardrail_demo.txt`](./transcripts/guardrail_demo.txt) exercises
 phone masking, injection refusal, and the groundedness fallback;
-[`transcripts/review_path_demo.txt`](./transcripts/review_path_demo.txt) shows a
-grounded draft being reviewed and an ungrounded draft being refused before
-review.
+[`transcripts/review_path_demo.txt`](./transcripts/review_path_demo.txt) shows
+an approved draft, a grounded draft revised by review, and a groundedness
+refusal that skips review. `GUARDRAIL_TEST_INJECT_UNGROUNDED` is off by default
+and is shown in this transcript's Case C and in
+[`transcripts/guardrail_demo.txt`](./transcripts/guardrail_demo.txt).
+`GUARDRAIL_TEST_INJECT_REVIEW_CLAIM` is also off by default and is shown in
+Case B of [`transcripts/review_path_demo.txt`](./transcripts/review_path_demo.txt).
+
+## Relevance heuristic
+
+`has_relevant_context` is a lexical overlap check, not semantic relevance. It
+uses hand-written suffix normalization and a generic query-word list to compare
+query terms with retrieved-context terms. It was developed against the same
+queries used in the evaluation, so those results are not an independent test.
+On the six held-out queries captured in
+[`transcripts/relevance_guard_demo.txt`](./transcripts/relevance_guard_demo.txt),
+it matched **6/6** expected outcomes; there were no misses in this small,
+hand-selected sample. This does not establish semantic relevance or
+generalization to other queries.
 
 ## Appointment answers
 
@@ -181,7 +202,7 @@ sources; each captured `.txt` entry names the command that produced its output.
 - `transcripts/budget_demo.txt` — normal 200 and oversized 413 responses;
   `python transcripts/budget_demo.py > transcripts/budget_demo.txt`.
 - `transcripts/cache_demo.py` — normalized cache and test-hook separation
-  source; run with `python transcripts/cache_demo.py`.
+  source for both guardrail hooks; run with `python transcripts/cache_demo.py`.
 - `transcripts/cache_demo.txt` — cache hit, call counts, and hook isolation;
   `python transcripts/cache_demo.py > transcripts/cache_demo.txt`.
 - `transcripts/calibration.txt` — measured RAG similarity scores;
@@ -228,7 +249,12 @@ sources; each captured `.txt` entry names the command that produced its output.
   `python -m review.autogen_review > transcripts/review_demo.txt`.
 - `transcripts/review_path_demo.py` — production review-path demo source;
   run with `python transcripts/review_path_demo.py`.
-- `transcripts/review_path_demo.txt` — grounded approval and guarded refusal;
+- `transcripts/review_path_demo.txt` — approved draft, revised review-claim
+  draft, and groundedness refusal that skips review;
   `python transcripts/review_path_demo.py > transcripts/review_path_demo.txt`.
+- `transcripts/relevance_guard_demo.py` — six held-out lexical relevance cases;
+  run with `python transcripts/relevance_guard_demo.py`.
+- `transcripts/relevance_guard_demo.txt` — captured results for the six
+  held-out relevance cases; `python transcripts/relevance_guard_demo.py > transcripts/relevance_guard_demo.txt`.
 - `transcripts/server.log` — clean Uvicorn startup, HTTP/WebSocket requests,
   and graceful shutdown; `uvicorn api.main:app --port 8000 > transcripts/server.log 2>&1`.

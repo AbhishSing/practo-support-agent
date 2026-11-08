@@ -41,6 +41,21 @@ def main() -> None:
     print(f"Generation calls after enabling test hook: {get_call_count()}")
     print(f"Hooked result differs from cached normal result: {hooked != first}")
 
+    os.environ["GUARDRAIL_TEST_INJECT_REVIEW_CLAIM"] = "1"
+    review_hooked = kickoff_validated(
+        build_crew(),
+        "Can I cancel my appointment?",
+    )
+    os.environ.pop("GUARDRAIL_TEST_INJECT_REVIEW_CLAIM", None)
+    print(
+        "Generation calls after enabling review-claim hook: "
+        f"{get_call_count()}"
+    )
+    print(
+        "Review-claim result differs from cached normal result: "
+        f"{review_hooked != first}"
+    )
+
 
 if __name__ == "__main__":
     main()

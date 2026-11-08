@@ -1,12 +1,92 @@
-Query: How much is a cardiology consultation?
-Review verdict:
-{
-  "approved": true,
-  "final_answer": "cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation.\n\n# Consultation Fee Structure\n\n**Document ID:** `KB-003`\n**Topic:** `consultation-fee structure by specialty`\n\n---\n\nGeneral Medicine consultations start at ₹500, while specialized visits such as Pediatrics and Dermatology are priced at ₹800. Super-specialties like Cardiology and Orthopedics carry a s\n\ntial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera.\n\n# Follow-Up Visit Discount Policy\n\n**Document ID:** `KB-010`\n**Topic:** `follow-up-visit discount policy`\n\n---\n\nPatients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi\n\nppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate.\n\nD and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.\n\n# Second-Opinion Consultation Process\n\n**Document ID:** `KB-011`\n**Topic:** `second-opinion process`\n\n---\n\nTo request a second opinion, patients can upload their existing medical records, diagnostic scans, and clinical notes to the portal. A senior specialist reviews the submitted documentation and \n\n# Patient Appointment Booking Policy\n\n**Document ID:** `KB-001`\n**Topic:** `appointment-booking policy`\n\n---\n\nPatients can book appointments up to 30 days in advance using our online patient portal or by calling our central desk. A valid government ID and up-to-date contact information are required",
-  "reason": "The answer is supported by the supplied retrieved context."
-}
-AgentResponse: {'answer': 'cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation.\n\n# Consultation Fee Structure\n\n**Document ID:** `KB-003`\n**Topic:** `consultation-fee structure by specialty`\n\n---\n\nGeneral Medicine consultations start at ₹500, while specialized visits such as Pediatrics and Dermatology are priced at ₹800. Super-specialties like Cardiology and Orthopedics carry a s\n\ntial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera.\n\n# Follow-Up Visit Discount Policy\n\n**Document ID:** `KB-010`\n**Topic:** `follow-up-visit discount policy`\n\n---\n\nPatients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi\n\nppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate.\n\nD and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.\n\n# Second-Opinion Consultation Process\n\n**Document ID:** `KB-011`\n**Topic:** `second-opinion process`\n\n---\n\nTo request a second opinion, patients can upload their existing medical records, diagnostic scans, and clinical notes to the portal. A senior specialist reviews the submitted documentation and \n\n# Patient Appointment Booking Policy\n\n**Document ID:** `KB-001`\n**Topic:** `appointment-booking policy`\n\n---\n\nPatients can book appointments up to 30 days in advance using our online patient portal or by calling our central desk. A valid government ID and up-to-date contact information are required ', 'sources': ['consultation-fee structure by specialty.md', 'telemedicine eligibility.md', 'follow-up-visit discount policy.md', 'appointment-booking policy.md', 'second-opinion process.md'], 'tool_used': ['rag_lookup'], 'escalation_score': None, 'grounded': True}
+Case A: ordinary supported policy question
+Review approved: True
+Final answer:
+cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation.
 
-Query: Can I cancel my appointment?
-Review verdict: skipped after groundedness refusal
-AgentResponse: {'answer': "I don't have that information in the clinic policy documents.", 'sources': ['cancellation_rescheduling window.md', 'follow-up-visit discount policy.md', 'appointment-booking policy.md', 'prescription-refill policy.md', 'consultation-fee structure by specialty.md'], 'tool_used': ['rag_lookup'], 'escalation_score': None, 'grounded': False}
+# Consultation Fee Structure
+
+**Document ID:** `KB-003`
+**Topic:** `consultation-fee structure by specialty`
+
+---
+
+General Medicine consultations start at ₹500, while specialized visits such as Pediatrics and Dermatology are priced at ₹800. Super-specialties like Cardiology and Orthopedics carry a s
+
+tial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera.
+
+# Follow-Up Visit Discount Policy
+
+**Document ID:** `KB-010`
+**Topic:** `follow-up-visit discount policy`
+
+---
+
+Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
+
+ppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate.
+
+D and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority.
+
+# Second-Opinion Consultation Process
+
+**Document ID:** `KB-011`
+**Topic:** `second-opinion process`
+
+---
+
+To request a second opinion, patients can upload their existing medical records, diagnostic scans, and clinical notes to the portal. A senior specialist reviews the submitted documentation and
+
+# Patient Appointment Booking Policy
+
+**Document ID:** `KB-001`
+**Topic:** `appointment-booking policy`
+
+---
+
+Patients can book appointments up to 30 days in advance using our online patient portal or by calling our central desk. A valid government ID and up-to-date contact information are required
+
+Case B: review-claim test hook
+Review claim draft: Cardiology and Orthopedics consultations carry a standard consultation fee of ₹1,200, and Consultations are free on Sundays.
+is_grounded(draft, retrieved context): True
+Review approved: False
+Verdict reason: Removed the unsupported Sunday consultation claim.
+Final answer:
+cialties like Cardiology and Orthopedics carry a standard consultation fee of ₹1,200. Diagnostic screenings and minor in-office procedures are billed separately from the base consultation. # Consultation Fee Structure
+
+**Document ID:** `KB-003`
+**Topic:** `consultation-fee structure by specialty`
+
+---
+
+General Medicine consultations start at ₹500, while specialized visits such as Pediatrics and Dermatology are priced at ₹800. Super-specialties like Cardiology and Orthopedics carry a s
+
+tial consultations for acute cardiac issues or severe orthopedic injuries require an in-person examination. Patients must have a stable internet connection and access to a video-enabled camera. # Follow-Up Visit Discount Policy
+
+**Document ID:** `KB-010`
+**Topic:** `follow-up-visit discount policy`
+
+---
+
+Patients returning for a follow-up consultation within 7 days of their initial visit receive a 50% discount on the doctor fee. Follow-up appointments scheduled between 8 to 14 days post-vi
+
+ppointments scheduled between 8 to 14 days post-visit receive a 25% discount. Any consultation occurring after 14 days will be billed at the standard initial consultation rate. D and up-to-date contact information are required during registration. Same-day appointments are allocated based on doctor availability and urgent care priority. # Second-Opinion Consultation Process
+
+**Document ID:** `KB-011`
+**Topic:** `second-opinion process`
+
+---
+
+To request a second opinion, patients can upload their existing medical records, diagnostic scans, and clinical notes to the portal. A senior specialist reviews the submitted documentation and
+
+# Patient Appointment Booking Policy
+
+**Document ID:** `KB-001`
+**Topic:** `appointment-booking policy`
+
+---
+
+Patients can book appointments up to 30 days in advance using our online patient portal or by calling our central desk. A valid government ID and up-to-date contact information are required.
+
+Case C: deliberately ungrounded test hook
+Review skipped: True
+Groundedness refusal: I don't have that information in the clinic policy documents.

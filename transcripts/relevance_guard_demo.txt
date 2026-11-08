@@ -1,0 +1,34 @@
+Query: How early can I book a visit?
+Expected relevant: True
+Has relevant context: True
+Expected result matched: True
+
+Query: Is there a fee for a second opinion?
+Expected relevant: True
+Has relevant context: True
+Expected result matched: True
+
+Query: What happens if I cancel late?
+Expected relevant: True
+Has relevant context: True
+Expected result matched: True
+
+Query: What is the weather in Paris?
+Expected relevant: False
+Has relevant context: False
+Fallback returned empty context; has_relevant_context is False.
+Expected result matched: True
+
+Query: Who won the football match?
+Expected relevant: False
+Has relevant context: False
+Fallback returned empty context; has_relevant_context is False.
+Expected result matched: True
+
+Query: Recommend a laptop for coding.
+Expected relevant: False
+Has relevant context: False
+Fallback returned empty context; has_relevant_context is False.
+Expected result matched: True
+
+Held-out relevance matches: 6/6
